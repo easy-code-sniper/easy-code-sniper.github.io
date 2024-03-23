@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>useEffect | easycodesniper | blog by chen qiyi</title>
+
+  
+  <meta name="author" content="chen qiyi">
+  
+
+  
+  <meta name="description" content="Effect在React中被专门定义为：由渲染引起的副作用。它允许你指定由渲染本身，而不是特定事件引起的副作用
+useEffect被设计用于将组件和外部系统同步，例如数据获取、服务器的链接、设置订阅等不受React控制的系统
+作为一个React Hook，它只能在组件的顶层调用，如果你需要在循环或判">
+  
+
+  
+  
+  <meta name="keywords" content="React-Hooks">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="useEffect"/>
+
+  <meta property="og:site_name" content="easycodesniper"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="easycodesniper" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">easycodesniper</a>
+    </h1>
+    <p class="site-description">blog by chen qiyi</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>useEffect</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/03/23/useEffect/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-03-23T09:07:57.000Z">
+          2024-03-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><code>Effect</code>在React中被专门定义为：由渲染引起的副作用。它允许你指定由渲染本身，而不是特定事件引起的副作用</p>
+<p><code>useEffect</code>被设计用于将组件和外部系统同步，例如数据获取、服务器的链接、设置订阅等不受React控制的系统</p>
+<p><strong>作为一个React Hook</strong>，它只能在组件的顶层调用，如果你需要在循环或判断的逻辑中调用，可以将这部分逻辑抽离出去成为一个组件。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><strong>语法：</strong><code>useEffect(setup, dependencies?)</code></p>
+<ul>
+<li><code>setup</code>: 处理Effect的函数，可以选择性的返回一个清理（cleanup）函数。当 组件被添加到DOM时 和 每次依赖项发生变化重新渲染后，React会首先利用旧值运行<code>cleanup</code>函数（如果你设置了该函数），然后使用新值运行<code>setup</code>函数。在组件从DOM中移除后，React将最后一次运行<code>cleanup</code>函数</li>
+<li><code>dependencies</code>（可选）: <code>setup</code>函数中引用的所有响应式值的列表。<ul>
+<li>React会使用<code>Object.is</code>来比较每个依赖项和它先前的值，只要有依赖项和先前的值不同时，将会重新运行<code>setup</code>函数。</li>
+<li>如果忽略此参数，则在每次重新渲染组件之后，将重新执行<code>setup</code>函数</li>
+<li>如果此参数为空数组<code>[]</code>，则只在初次渲染组件的时候执行<code>setup</code>函数</li>
+</ul>
+</li>
+</ul>
+<p><code>useEffect</code>的运行过程：</p>
+<ol>
+<li>将组件挂载到页面时，将运行<code>setup</code>函数</li>
+<li>重新渲染依赖项变更的组件后：</li>
+</ol>
+<ul>
+<li>首先，使用旧值运行<code>cleanup</code>函数</li>
+<li>然后，使用新值运行<code>setup</code>函数</li>
+</ul>
+<ol start="3">
+<li>当组件从页面卸载后，<code>cleanup</code>函数将运行最后一次</li>
+</ol>
+<blockquote>
+<p>在<strong>开发环境</strong>下，React在运行<code>setup</code>之前会额外运行一次<code>setup</code>和<code>cleanup</code>，这是一种压力测试，来验证Effect逻辑是否正确实现</p>
+</blockquote>
+<p>使用示例：模拟一个连接服务器的组件</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useEffect, useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [serverUrl, setServerUrl] = <span class="title function_">useState</span>(<span class="string">&#x27;easycodesniper.top&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> connection = <span class="title function_">createConnection</span>(serverUrl) <span class="comment">//模拟连接服务器</span></span><br><span class="line">    connection.<span class="title function_">connect</span>()</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123; <span class="comment">//在销毁组件时断开连接</span></span><br><span class="line">      connection.<span class="title function_">disconnect</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [serverUrl]) <span class="comment">//依赖项，当服务器路径改变时重新执行setup</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span>&gt;</span>欢迎来到&#123;serverUrl&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">App</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="useEffect执行时机"><a href="#useEffect执行时机" class="headerlink" title="useEffect执行时机"></a><code>useEffect</code>执行时机</h2><p>每当你的组件渲染时，React将更新视图，<strong>然后运行</strong><code>useEffect</code>中的代码。换句话说，**<code>useEffect</code>会把这段代码放到视图更新渲染之后执行**</p>
+<h2 id="实践导向"><a href="#实践导向" class="headerlink" title="实践导向"></a>实践导向</h2><h3 id="在Effect中根据先前的state更新state"><a href="#在Effect中根据先前的state更新state" class="headerlink" title="在Effect中根据先前的state更新state"></a>在Effect中根据先前的state更新state</h3><p>当想在Effect中根据先前的state更新state时，会遇到问题：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useEffect, useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [cnt, setCnt] = <span class="title function_">useState</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setCnt</span>(cnt + <span class="number">1</span>) <span class="comment">//每秒将cnt加1</span></span><br><span class="line">    &#125;, <span class="number">1000</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> <span class="built_in">clearInterval</span>(timer)</span><br><span class="line">  &#125;, [cnt]) <span class="comment">//将cnt作为依赖项</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">spsn</span>&gt;</span>&#123;cnt&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">App</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>因为<code>cnt</code>是响应式数据，所以必须在依赖项列表中指定它，这就会导致Effect在每次cnt变化之后都要执行<code>cleanup</code>和<code>setup</code></p>
+<p>解决方法：在<code>setCnt</code>中不是直接传入修改的值，而是传入<code>c =&gt; c + 1</code>状态更新器，这样做的目的是：<strong>将cnt从依赖项中移除</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [cnt, setCnt] = <span class="title function_">useState</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setCnt</span>(<span class="function"><span class="params">c</span> =&gt;</span> c + <span class="number">1</span>) <span class="comment">//每秒将cnt加1</span></span><br><span class="line">    &#125;, <span class="number">1000</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> <span class="built_in">clearInterval</span>(timer)</span><br><span class="line">  &#125;, []) </span><br></pre></td></tr></table></figure>
+
+<h3 id="Effect依赖于对象或函数"><a href="#Effect依赖于对象或函数" class="headerlink" title="Effect依赖于对象或函数"></a>Effect依赖于对象或函数</h3><p>如果你的Effect依赖于渲染期间创建的对象或函数，则它可能会频繁运行</p>
+<p>示例代码：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useEffect, useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">createOptions</span>(<span class="params">serverUrl</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      serverUrl,</span><br><span class="line">      <span class="comment">// ... others</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> options = <span class="title function_">createOptions</span>(<span class="string">&#x27;easycodesniper.top&#x27;</span>) <span class="comment">//在Effect中被使用</span></span><br><span class="line">    <span class="keyword">const</span> connection = <span class="title function_">createConnection</span>(options)</span><br><span class="line">    connection.<span class="title function_">connect</span>()</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123; </span><br><span class="line">      connection.<span class="title function_">disconnect</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [createOptions]) </span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span>&gt;</span>欢迎来到&#123;serverUrl&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">App</span>;</span><br></pre></td></tr></table></figure>
+
+<p>对<code>createOptions</code>函数本身的封装并没有问题。</p>
+<p>首先，对象或函数都是引用类型的值，判断他们是否相同是通过是否指向同一块内存地址</p>
+<p>然后，每次组件重新渲染，都会从头创建一个<code>createOptions</code>函数，那这个函数的地址和之前的地址肯定不同，也就意味着这两者不是相同的（即依赖项发生了改变），会导致Effect在每次重新渲染之后再次重新执行</p>
+<p>所以，<strong>避免使用在渲染期间创建的函数作为依赖项</strong>，<strong>请在<code>Effect</code>内部声明它</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useEffect, useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> [serverUrl, setServerUrl] = <span class="title function_">useState</span>(<span class="string">&#x27;easycodesniper.top&#x27;</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在Effect内部创建它</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">createOptions</span>(<span class="params">serverUrl</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        serverUrl,</span><br><span class="line">        <span class="comment">// ... others</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> options = <span class="title function_">createOptions</span>(serverUrl) <span class="comment">//在Effect中被使用</span></span><br><span class="line">    <span class="keyword">const</span> connection = <span class="title function_">createConnection</span>(options)</span><br><span class="line">    connection.<span class="title function_">connect</span>()</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123; </span><br><span class="line">      connection.<span class="title function_">disconnect</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [serverUrl]) </span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span>&gt;</span>欢迎来到&#123;serverUrl&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">App</span>;</span><br></pre></td></tr></table></figure>
+
+<p>通过在<code>Effect</code>内部定义<code>createOption</code>函数，这样<code>Effect</code>只依赖于<code>serverUrl</code>字符串，字符串作为基础类型值，除非你将它设置为其他值，否则它不会改变</p>
+<h3 id="你不需要Effect"><a href="#你不需要Effect" class="headerlink" title="你不需要Effect"></a>你不需要<code>Effect</code></h3><p><code>Effect</code>是React范式中的一种脱围机制。它让你可以使组件和一些外部的系统同步。如果没有涉及到外部系统（例如只是像根据props或state的变化更新一个组件的state），你就不应该使用<code>Effect</code></p>
+<p><strong>常见的情况：</strong></p>
+<ol>
+<li><strong>不必使用Effect来转换渲染所需的数据</strong>。例如，想在展示一个列表之前先做筛选，你可能会写一个当列表变化时更新state的<code>Effect</code>。然而，这是低效的。</li>
+</ol>
+<ul>
+<li>当你更新state，React首先会调用组件来渲染视图</li>
+<li>然后React会执行你的<code>Effect</code>，如果你的<code>Effect</code>也立即更新了这个state，将会重新执行整个组件</li>
+</ul>
+<p>所以，你应该在组件的顶层转换数据</p>
+<ol start="2">
+<li><strong>根据props或state来更新state</strong>。例如，你又一个包含了两个state变量的组件：<code>firstName</code> 和 <code>lastName</code>。你想通过他们计算出<code>fullName</code>。你可能会写一个当<code>firstName</code>或者<code>lastName</code>变化时更新<code>fullName</code>的<code>Effect</code></li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [firstName, setFirstName] = <span class="title function_">useState</span>(<span class="string">&#x27;easycode&#x27;</span>);</span><br><span class="line">  <span class="keyword">const</span> [lastName, setLastName] = <span class="title function_">useState</span>(<span class="string">&#x27;sniper&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> [fullName, setFullName] = <span class="title function_">useState</span>(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setFullName</span>(firstName + <span class="string">&#x27; &#x27;</span> + lastName);</span><br><span class="line">  &#125;, [firstName, lastName]);</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样做会导致：</p>
+<ul>
+<li>首先，React会调用组件，使用<code>fullName</code>的旧值执行整个渲染流程</li>
+<li>然后，React会执行你的<code>Effect</code>，用更新后的值又重新渲染了一遍</li>
+</ul>
+<p>所以，你应该直接计算这个值<code>const fullName = firstName + &#39; &#39; + lastName</code></p>
+<h3 id="初始化应用"><a href="#初始化应用" class="headerlink" title="初始化应用"></a>初始化应用</h3><p>有些逻辑只需要在应用加载时执行一次，你可能会将它放到一顶层组件的<code>Effect</code>中</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">loadFunction</span>() </span><br><span class="line">  &#125;, [])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这会遇到一些问题：在开发环境它会被执行两次，这可能会导致潜在的问题</p>
+<p>解决方法：</p>
+<p><strong>添加一个顶层变量来记录它是否已经执行过了</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> didInit = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!didInit) &#123;</span><br><span class="line">      didInit = <span class="literal">true</span></span><br><span class="line">      <span class="comment">// 只在每次应用加载时执行一次</span></span><br><span class="line">      <span class="title function_">loadFunction</span>() </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;, [])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><p>很多场景都需要使用<code>Effect</code>来发起数据请求，例如：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">SearchResults</span>(<span class="params">&#123; query &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [results, setResults] = <span class="title function_">useState</span>([]);</span><br><span class="line">  <span class="keyword">const</span> [page, setPage] = <span class="title function_">useState</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 模拟发送数据请求</span></span><br><span class="line">    <span class="title function_">fetchResults</span>(query, page).<span class="title function_">then</span>(<span class="function"><span class="params">json</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">setResults</span>(json);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;, [query, page]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而上面的代码有一个问题，假如你快速的输入<code>hello</code>，那么query会从<code>h</code>变成<code>he</code>,<code>hel</code>,<code>hell</code>最后是<code>hello</code>，这会触发一连串不同的数据请求，但无法保证返回顺序。例如，<code>hell</code>的响应可能在<code>hello</code>的响应<strong>之后</strong>返回，这将会显示错误的搜索结果</p>
+<p>为了修复这个问题，需要添加一个<strong>清理函数</strong>来忽略较早的返回结果</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">SearchResults</span>(<span class="params">&#123; query &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [results, setResults] = <span class="title function_">useState</span>([]);</span><br><span class="line">  <span class="keyword">const</span> [page, setPage] = <span class="title function_">useState</span>(<span class="number">1</span>);</span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> ignore = <span class="literal">false</span>;</span><br><span class="line">    <span class="title function_">fetchResults</span>(query, page).<span class="title function_">then</span>(<span class="function"><span class="params">json</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!ignore) &#123;</span><br><span class="line">        <span class="title function_">setResults</span>(json);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      ignore = <span class="literal">true</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, [query, page]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这可以确保在<code>Effect</code>中获取数据时，除了最后一次请求的所有返回结果都将被忽略</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/React-Hooks/">React-Hooks</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2024 chen qiyi
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
