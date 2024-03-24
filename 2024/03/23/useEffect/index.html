@@ -17,7 +17,7 @@ useEffect被设计用于将组件和外部系统同步，例如数据获取、�
 
   
   
-  <meta name="keywords" content="React-Hooks">
+  <meta name="keywords" content="React Hooks">
   
 
   <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
@@ -90,7 +90,7 @@ useEffect被设计用于将组件和外部系统同步，例如数据获取、�
         <p><code>Effect</code>在React中被专门定义为：由渲染引起的副作用。它允许你指定由渲染本身，而不是特定事件引起的副作用</p>
 <p><code>useEffect</code>被设计用于将组件和外部系统同步，例如数据获取、服务器的链接、设置订阅等不受React控制的系统</p>
 <p><strong>作为一个React Hook</strong>，它只能在组件的顶层调用，如果你需要在循环或判断的逻辑中调用，可以将这部分逻辑抽离出去成为一个组件。</p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><strong>语法：</strong><code>useEffect(setup, dependencies?)</code></p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><strong><code>useEffect(setup, dependencies?)</code></strong></p>
 <ul>
 <li><code>setup</code>: 处理Effect的函数，可以选择性的返回一个清理（cleanup）函数。当 组件被添加到DOM时 和 每次依赖项发生变化重新渲染后，React会首先利用旧值运行<code>cleanup</code>函数（如果你设置了该函数），然后使用新值运行<code>setup</code>函数。在组件从DOM中移除后，React将最后一次运行<code>cleanup</code>函数</li>
 <li><code>dependencies</code>（可选）: <code>setup</code>函数中引用的所有响应式值的列表。<ul>
@@ -186,7 +186,7 @@ useEffect被设计用于将组件和外部系统同步，例如数据获取、�
 
     <span class="post-tags">
       <i class="icon-tags"></i>
-        <a href="/tags/React-Hooks/">React-Hooks</a>
+        <a href="/tags/React-Hooks/">React Hooks</a>
     </span>
     
 
