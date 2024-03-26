@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>useMemo &amp; useCallback | easycodesniper | blog by chen qiyi</title>
+
+  
+  <meta name="author" content="chen qiyi">
+  
+
+  
+  <meta name="description" content="useMemouseMemo用于缓存每次重新渲染都需要计算的结果
+语法useMemo(calculateValue,dependencies)
+
+calculateValue: 缓存计算值的函数，它应该是一个没有参数的纯函数。React将在首次渲染时调用该函数，在之后的渲染中，如果依赖项（depen">
+  
+
+  
+  
+  <meta name="keywords" content="React HookS">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="useMemo &amp; useCallback"/>
+
+  <meta property="og:site_name" content="easycodesniper"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="easycodesniper" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">easycodesniper</a>
+    </h1>
+    <p class="site-description">blog by chen qiyi</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>useMemo &amp; useCallback</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/03/26/useMemo和useCallback/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-03-26T12:59:28.000Z">
+          2024-03-26
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h1 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a><code>useMemo</code></h1><p><code>useMemo</code>用于缓存每次重新渲染都需要计算的结果</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><strong><code>useMemo(calculateValue,dependencies)</code></strong></p>
+<ul>
+<li><code>calculateValue</code>: 缓存计算值的函数，它应该是一个没有参数的纯函数。React将在首次渲染时调用该函数，在之后的渲染中，如果依赖项（<code>dependencies</code>）没有发生变化，React将不会调用该函数，而是直接返回缓存的值</li>
+<li><code>dependencies</code>: 依赖项</li>
+</ul>
+<p><strong>返回值</strong></p>
+<ul>
+<li>在初次渲染时，返回<code>calculateValue</code>函数的返回值</li>
+<li>在之后的渲染中，如果依赖项没有变化，则返回缓存的值；如果依赖项发生了变化，将重新调用<code>calculateValue</code>函数并计算出新的返回值</li>
+</ul>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p><code>useMemo</code>主要的用法有两种：</p>
+<ul>
+<li>通过缓存数据，来跳过代价昂贵的计算</li>
+<li>跳过组件的重新渲染</li>
+</ul>
+<p><strong>跳过代价昂贵的计算</strong></p>
+<p>例如，我们有一个todos的大数组，需要根据tab来筛选出某些数组项。在初次渲染之后，只有当todos数组或者tab发生改变了才会重新执行过滤数组的方法。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">TodoList</span>(<span class="params">&#123; todos, tab, theme &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> visibleTodos = <span class="title function_">useMemo</span>(<span class="function">() =&gt;</span> <span class="title function_">filterTodos</span>(todos, tab), [todos, tab]);</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>跳过组件的重新渲染</strong></p>
+<p>例如，<code>ParentComp</code>组件接受一个<code>theme</code>的props，用于改变组件内部样式，<strong>默认情况下，一个组件重新渲染时，React会递归重新渲染它的所有子组建</strong>。也就是，当<code>theme</code>重新渲染时，会导致<code>SonComp</code>组件的重新渲染，但其实<code>SonComp</code>组件并不需要重新渲染。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ParentComp</span>(<span class="params">&#123; theme &#125;</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> visibleTodos = <span class="title function_">useMemo</span>(<span class="function">() =&gt;</span> <span class="title function_">filterTodos</span>(todos, tab), [todos, tab]);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;theme&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">SonComp</span> <span class="attr">items</span>=<span class="string">&#123;visibleTodos&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过将组件用<code>memo</code>包裹起来，这样当它的props和上次传入的相同时，就不会触发重新渲染</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; memo &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">SonComp</span> = <span class="title function_">memo</span>(<span class="keyword">function</span> <span class="title function_">SonComp</span>(<span class="params">&#123; items &#125;</span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>引出<code>usecallback</code></strong></p>
+<p>现在，<code>SonComp</code>组件被包裹在<code>memo</code>中，接收一个函数作为props。每次<code>ParentComp</code>组件重新渲染，都会导致<code>handleClick</code>函数的重新创建，即产生不同的<code>handleClick</code>，这就会导致<code>SonComp</code>组件的重新渲染</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ParentComp</span>(<span class="params">&#123; theme &#125;</span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> handleClick = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="language-xml"><span class="tag">&lt;<span class="name">SonComp</span> <span class="attr">handleClick</span>=<span class="string">&#123;handleClick&#125;/</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">SonComp</span> = <span class="title function_">memo</span>(<span class="keyword">function</span> <span class="title function_">SonComp</span>(<span class="params">&#123; handleClick &#125;</span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;) </span><br></pre></td></tr></table></figure>
+
+<p>我们很容易想到使用<code>useMemo</code>来缓存handleClick函数，如下所示：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> handleClick = <span class="title function_">useMeme</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123; <span class="comment">// 原来handleClick的逻辑</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;,[xxx])</span><br></pre></td></tr></table></figure>
+<p>这样看上去就很冗余了，在React中有另外一个Hook用于缓存函数。</p>
+<h1 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a><code>useCallback</code></h1><p><code>useCallback</code>允许你在多次渲染中缓存函数</p>
+<h2 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h2><p><strong><code>useCallback(fn, dependencies)</code></strong></p>
+<ul>
+<li><code>fn</code>: 想要缓存函数，它可以传入任何参数并且返回任何值。React将在首次渲染时<strong>返回</strong>（不是调用）该函数，在之后的渲染中，如果依赖项（<code>dependencies</code>）没有发生变化，React将返回相同的函数。<strong>在任何渲染中，React都不会调用该函数，而是返回该函数</strong></li>
+<li><code>dependencies</code>: 依赖项</li>
+</ul>
+<p><strong>返回值</strong></p>
+<p>在初次渲染时，<code>useCallback</code>返回你已经传入的<code>fn</code>函数</p>
+<p>在之后的渲染中, 如果依赖没有改变，<code>useCallback</code>返回上一次渲染中缓存的<code>fn</code>函数；否则返回这一次渲染传入的<code>fn</code>。</p>
+<h2 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h2><p>接着上面的例子对<code>handleClick</code>进行改造，使它也被缓存起来</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> handleClick = <span class="title function_">useCallback</span>(<span class="function">(<span class="params">args</span>) =&gt;</span> &#123; <span class="comment">//和普通函数一样使用</span></span><br><span class="line">    <span class="comment">// 直接在此处书写逻辑代码</span></span><br><span class="line">&#125;,[xxx])</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/React-HookS/">React HookS</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2024 chen qiyi
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
