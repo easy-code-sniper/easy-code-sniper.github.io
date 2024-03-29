@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>useContext | easycodesniper | blog by chen qiyi</title>
+
+  
+  <meta name="author" content="chen qiyi">
+  
+
+  
+  <meta name="description" content="context在开发中，父组件可能需要通过多层中间组件将 props 传递给某个子孙组件，这个传递 props 的过程就会变得十分冗长
+context可以在组件树中不需要props 传递数据，而是将数据直达所需的组件
+context可以让父组件为其内部的整个组件树人提供数据
+使用context使用c">
+  
+
+  
+  
+  <meta name="keywords" content="React Hooks">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="useContext"/>
+
+  <meta property="og:site_name" content="easycodesniper"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="easycodesniper" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">easycodesniper</a>
+    </h1>
+    <p class="site-description">blog by chen qiyi</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>useContext</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/03/29/useContext/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-03-29T12:59:23.000Z">
+          2024-03-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="context"><a href="#context" class="headerlink" title="context"></a><code>context</code></h2><p>在开发中，父组件可能需要通过多层中间组件将 props 传递给某个子孙组件，这个传递 props 的过程就会变得十分冗长</p>
+<p><code>context</code>可以在组件树中<strong>不需要</strong>props 传递数据，而是将数据<strong>直达</strong>所需的组件</p>
+<p><code>context</code>可以让父组件为其<strong>内部的整个组件树人</strong>提供数据</p>
+<h2 id="使用context"><a href="#使用context" class="headerlink" title="使用context"></a>使用<code>context</code></h2><p>使用<code>context</code>需要三个步骤：</p>
+<ul>
+<li>创建一个<code>context</code></li>
+<li>在需要数据的组件中使用创建的<code>context</code></li>
+<li>在指定数据的组件中提供<code>context</code></li>
+</ul>
+<h3 id="创建一个context"><a href="#创建一个context" class="headerlink" title="创建一个context"></a>创建一个<code>context</code></h3><p>新建一个 js 文件，在其中创建<code>constext</code>并导出他</p>
+<p>使用<code>createContext()</code>来创建一个 context，需要给他传入一个默认值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createContext &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">MyContext</span> = <span class="title function_">createContext</span>(<span class="number">1</span>); <span class="comment">// 创建并导出一个context</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用context-1"><a href="#使用context-1" class="headerlink" title="使用context"></a>使用<code>context</code></h3><p>在需要用到数据的组件中，引入<code>useContext</code>Hook 以及 创建的<code>context</code></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useContext &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">MyContext</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;./MyContext.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Son</span>(<span class="params"></span>) [</span><br><span class="line">  <span class="keyword">const</span> context = <span class="title function_">useContext</span>(<span class="title class_">MyContext</span>) <span class="comment">// useContext 告诉 React 想要读取 myContext</span></span><br><span class="line">  <span class="comment">// 现在，得到的context就是myContext的默认值</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="提供context"><a href="#提供context" class="headerlink" title="提供context"></a>提供<code>context</code></h3><p>在父组件中使用<code>context provider</code>将子组件包裹起来，就可以提供<code>context</code>给他们</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useState &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">MyContext</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;./MyContext.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Parent</span>(<span class="params"></span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> [ name, setName ] = <span class="title function_">useState</span>(<span class="string">&#x27;easy code sniper&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;MyContext.Provider value=&#123;name&#125;&gt;</span><br><span class="line">      &lt;MyContext.Provider&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这告诉 React：“如果在<code>Parent</code>组件中的任何子组件请求<code>MyContext</code>，给他们这个<code>name</code>。”<br>组件会使用 UI 树中在它上层最近的那个<code>MyContext.Provider</code>传递过来的值。</p>
+<h2 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a><code>useContext</code></h2><p><strong>语法：</strong><code>const value = useContext(SomeContext)</code></p>
+<ul>
+<li><code>SomeContext</code>就是先前用<code>createContext</code>创建的 context，context 本身不包含信息，它只代表你可以提供或从组件中读取的信息类型。</li>
+</ul>
+<p><strong>返回值</strong></p>
+<p><code>useContext</code>为调用它的组件返回 context 的值。它的返回值被确定为传递给树中调用组件上方最近的<code>SmeContext.Provider</code>的<code>value</code>。<br>如果没有这样的 provider，那么返回值将会是为创建该 context 传递给<code>createContext</code>的<code>defaultValue</code>。返回的值始终是最新的，如果 context 发生变化，React 会自动重新渲染读取 context 的组件。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/React-Hooks/">React Hooks</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2024 chen qiyi
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
