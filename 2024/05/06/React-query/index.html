@@ -1,0 +1,466 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>React-query | easycodesniper | blog by chen qiyi</title>
+
+  
+  <meta name="author" content="chen qiyi">
+  
+
+  
+  <meta name="description" content="查询 queries
+对于query的定义，在官方文档中是这么说的：“A query is a declarative dependency on an asynchronous source of data that is tied to a unique key” 翻译过来是：查询是对绑定到唯一">
+  
+
+  
+  
+  <meta name="keywords" content="React">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="React-query"/>
+
+  <meta property="og:site_name" content="easycodesniper"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="easycodesniper" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">easycodesniper</a>
+    </h1>
+    <p class="site-description">blog by chen qiyi</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>React-query</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/05/06/React-query/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-05-06T13:35:58.000Z">
+          2024-05-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="查询-queries"><a href="#查询-queries" class="headerlink" title="查询 queries"></a>查询 queries</h2><blockquote>
+<p>对于query的定义，在官方文档中是这么说的：<br>“A query is a declarative dependency on an asynchronous source of data that is tied to a unique key” 翻译过来是：查询是对绑定到唯一键的异步数据源的声明性依赖项</p>
+</blockquote>
+<p>我对于query的理解是：将一个<strong>唯一的key（unique key）</strong> 与 一个<strong>获取数据的方法</strong> 进行绑定</p>
+<p>你可以在组件中或者hook中，使用 <strong><code>useQuery</code></strong> 来订阅一个查询</p>
+<p><code>useQuery</code> <strong>至少需要</strong>接受两个参数：</p>
+<ul>
+<li>key：该查询的唯一键值</li>
+<li>fn：一个返回Promise的函数，能解析出数据或者抛出错误（即具体的请求数据的函数）</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useQuery &#125; <span class="keyword">from</span> <span class="string">&#x27;@tanstack/react-query&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 具体获取数据的函数</span></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">getUserInfo</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">axios</span>(<span class="string">&#x27;/api/useInfo&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 订阅一个查询</span></span><br><span class="line">    <span class="keyword">const</span> userInfo = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">        <span class="attr">queryKey</span>: [<span class="string">&#x27;useData&#x27;</span>],</span><br><span class="line">        <span class="attr">queryFn</span>: getUserInfo </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个唯一的<strong>key</strong>值，将在内部用于重新获取、缓存和在整个项目中共享该查询的信息</p>
+</blockquote>
+<p><code>useQuery</code>的返回结果包含了你需要用到的绝大部分信息，这也正是使用react-query的一个好处，可以提高开发效率</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  接上面例子</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; isLoading, isError, isSuccess, data, error, status &#125; = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">    <span class="attr">queryKey</span>: [<span class="string">&#x27;useData&#x27;</span>],</span><br><span class="line">    <span class="attr">queryFn</span>: getUserInfo </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>首先是结果中会返回一些比较重要的状态：</p>
+<ul>
+<li>布尔值<code>isLoading</code> 或者 <code>status === &#39;loading&#39;</code> 表示查询暂时还没有数据</li>
+<li>布尔值<code>isError</code> 或者 <code>status === &#39;error&#39;</code> 表示查询遇到了错误</li>
+<li>布尔值<code>isSuccess</code> 或者 <code>status === &#39;success&#39;</code> 表示查询成功，数据可用</li>
+</ul>
+<blockquote>
+<p>可以看出 status 和 isLoading、isError、isSuccess的作用是差不多的，关键在于你习惯于使用谁来进行判断</p>
+</blockquote>
+<p>然后是一些重要的信息：</p>
+<ul>
+<li><code>error</code> 如果查询处于<code>isError</code>状态,可以获取到错误的具体信息</li>
+<li><code>data</code> 如果查询处于<code>isSuccess</code>状态，可以获取到请求的数据</li>
+</ul>
+<p>下面是一个简单的例子，来整体演示使用<code>useQuery</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useQuery &#125; <span class="keyword">from</span> <span class="string">&#x27;@tanstack/react-query&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 具体获取数据的函数</span></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">getUserInfo</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">axios</span>(<span class="string">&#x27;/api/useInfo&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 订阅一个查询</span></span><br><span class="line">    <span class="keyword">const</span> &#123; isLoading, isError, isSuccess, data, error, status &#125; = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">        <span class="attr">queryKey</span>: [<span class="string">&#x27;useData&#x27;</span>],</span><br><span class="line">        <span class="attr">queryFn</span>: getUserInfo </span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status === <span class="string">&quot;loading&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Loading...<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status === <span class="string">&quot;error&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Error: &#123;error.message&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">div</span>&gt;</span>userName: &#123;data.userName&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">div</span>&gt;</span>age: &#123;data.age&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="查询键值-queryKey"><a href="#查询键值-queryKey" class="headerlink" title="查询键值 queryKey"></a>查询键值 queryKey</h3><p><strong>在react-query内部基于queryKey来管理查询缓存</strong></p>
+<p>queryKey必须是一个<strong>数组</strong>，对数组内部的结构没有过多的限制，该数组可以简单的由一个或多个字符串构成，也可以是包含许多嵌套对象的数组。</p>
+<ol>
+<li>最简单的形式</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useQuery</span>(&#123; </span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&#x27;userData&#x27;</span>], </span><br><span class="line">  ...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>复杂的形式</li>
+</ol>
+<p>当查询需要更多的信息来唯一的描述数据时，数组可以是 字符串 加上 任意数量的可序列化对象的形式 </p>
+<p>常见的场景有：需要传递参数来进行查询</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据 userId 查询数据</span></span><br><span class="line"><span class="keyword">let</span> userId = <span class="string">&#x27;xxx&#x27;</span></span><br><span class="line"><span class="title function_">useQuery</span>(&#123; </span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&#x27;useInfo&#x27;</span>, userId], </span><br><span class="line">  ... </span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询特定type的数据</span></span><br><span class="line"><span class="title function_">useQuery</span>(&#123; </span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&#x27;xxxx&#x27;</span>, &#123; <span class="attr">type</span>: <span class="string">&#x27;xxx&#x27;</span> &#125;] </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>注意：</strong><br>queryKey的散列是确定的，即 <strong>顶层数组中</strong>各个<strong>key不同的排列顺序</strong>会被认为是<strong>不同的查询键值</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以下两个的查询键值不相等，因为顶层数组中各key的排列顺序不同</span></span><br><span class="line"><span class="title function_">useQuery</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&#x27;todos&#x27;</span>, status, page], ... &#125;)</span><br><span class="line"><span class="title function_">useQuery</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&#x27;todos&#x27;</span>, page, status], ...&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下两个的查询键值是相等的，顶层数组中各key的排列顺序相同，嵌套对象中的排列顺序不影响</span></span><br><span class="line"><span class="title function_">useQuery</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&#x27;todos&#x27;</span>, &#123; status, page &#125;], ... &#125;)</span><br><span class="line"><span class="title function_">useQuery</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&#x27;todos&#x27;</span>, &#123; page, status &#125;], ...&#125;)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="查询函数-queryFn"><a href="#查询函数-queryFn" class="headerlink" title="查询函数 queryFn"></a>查询函数 queryFn</h3><blockquote>
+<p>官方文档对queryFn的定义：A query function can be literally any function that returns a promise. The promise that is returned should either resolve the data or throw an error.</p>
+</blockquote>
+<p>即：<strong>queryFn可以是任何形式的函数，必须返回一个promise，并且返回的promise应该 给出数据 或者 抛出错误</strong></p>
+<ol>
+<li>queryFn的参数</li>
+</ol>
+<p>queryFn默认接受一个<code>queryFunctionContext</code>参数，该参数是一个对象，主要包含以下属性：</p>
+<ul>
+<li>queryKey：即整个queryKey数组</li>
+<li>pageParam：在 无限查询 中会使用到，包含查询当前页所使用的参数</li>
+<li>signal：用作 查询取消</li>
+<li>meta：可以填写任意关于该查询的额外信息</li>
+</ul>
+<p>由上可知，queryKey不仅可以用于唯一的标识查询，也可以作为参数传递给queryFn</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useQuery</span>(&#123;  </span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&#x27;useData&#x27;</span>, useId],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData     </span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getUserData</span> = <span class="keyword">async</span> (<span class="params">&#123; queryKey &#125;</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> [ _key, useId ] = queryKey</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;/api/useData&#x27;</span> + useId)</span><br><span class="line">  <span class="keyword">return</span> data</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>抛出和处理错误</li>
+</ol>
+<p>为了使 React Query 确定查询错误，查询函数的错误必须抛出或返回rejected Promise。查询函数中引发的任何错误都将被持久化在查询的error状态中</p>
+<h2 id="并行查询"><a href="#并行查询" class="headerlink" title="并行查询"></a>并行查询</h2><p>并行查询即并行的执行多个查询，或者说同时执行的查询</p>
+<ol>
+<li>如果需要并行查询的数量较少且固定，可以使用手动的并行查询</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">App</span> () &#123;</span><br><span class="line">  <span class="comment">// 下面的查询将自动地并行执行</span></span><br><span class="line">  <span class="keyword">const</span> usersQuery = <span class="title function_">useQuery</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&#x27;users&#x27;</span>], <span class="attr">queryFn</span>: fetchUsers &#125;);</span><br><span class="line">  <span class="keyword">const</span> teamsQuery = <span class="title function_">useQuery</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&#x27;teams&#x27;</span>], <span class="attr">queryFn</span>: fetchTeams &#125;);</span><br><span class="line">  <span class="keyword">const</span> projectsQuery = <span class="title function_">useQuery</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&#x27;projects&#x27;</span>], <span class="attr">queryFn</span>: fetchProjects &#125;);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在 React 的 suspense 模式下使用 React Query 时，这种并行模式不起作用。 因为第一个查询将在内部抛出 Promise，并且将在其他查询运行之前挂起组件。 此时建议使用 <code>useQueries</code> hook</p>
+</blockquote>
+<ol start="2">
+<li>使用<code>useQueries</code>进行动态并行查询</li>
+</ol>
+<p>如果需要执行的查询数量不固定，即在每次渲染之间都会变化，那就不能进行手动查询了</p>
+<p><code>useQueries</code>接受一组作为查询配置的对象，并以数组形式返回查询的结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params">&#123; users &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> userQueries = <span class="title function_">useQueries</span>(&#123;</span><br><span class="line">    <span class="attr">queries</span>: users.<span class="title function_">map</span>(<span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">queryKey</span>: [<span class="string">&quot;user&quot;</span>, user.<span class="property">id</span>],</span><br><span class="line">        <span class="attr">queryFn</span>: <span class="function">() =&gt;</span> <span class="title function_">fetchUserById</span>(user.<span class="property">id</span>),</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="有依赖的查询"><a href="#有依赖的查询" class="headerlink" title="有依赖的查询"></a><a id="enabled"></a>有依赖的查询</h2><p>有依赖的查询 或者说 按顺序排列的查询，即当前查询是否执行（或何时执行）依赖于前一个查询的结果</p>
+<p>可以使用<code>enable</code>配置项来告诉query何时可以运行：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 先执行这个query来拿到user的数据</span></span><br><span class="line"><span class="keyword">const</span> &#123; data &#125; = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;user&quot;</span>, email],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserByEmail,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> userId = data?.<span class="property">id</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此query依赖于 user query 的结果</span></span><br><span class="line"><span class="keyword">const</span> &#123; data &#125; = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;projects&quot;</span>, userId],</span><br><span class="line">  <span class="attr">queryFn</span>: getProjectsByUser,</span><br><span class="line">  <span class="comment">// 直到 userId 存在，查询才会被执行</span></span><br><span class="line">  <span class="attr">enabled</span>: !!userId,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="QueryClient"><a href="#QueryClient" class="headerlink" title="QueryClient"></a>QueryClient</h2><p>使用<code>QueryClient</code>可以创建一个query客户端，来与query缓存联系起来</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">QueryClient</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@tanstack/react-query&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> queryClient = <span class="keyword">new</span> <span class="title class_">QueryClient</span>(&#123;</span><br><span class="line">  <span class="comment">// 全局设置query的一些配置</span></span><br><span class="line">  <span class="attr">defaultOptions</span>: &#123;</span><br><span class="line">    <span class="attr">queries</span>: &#123;</span><br><span class="line">      <span class="attr">staleTime</span>: <span class="title class_">Infinity</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><code>QueryClient</code>可传入一个对象，其中包含三个参数（三个参数都是可选的）：</p>
+<ul>
+<li><code>defaultOptions</code>：为使用该client的所有查询（query）和修改（mutation）设置默认的配置项</li>
+<li><code>queryCache</code>：该client所连接的query缓存</li>
+<li><code>mutationCache</code>：该client所连接的mutation缓存</li>
+</ul>
+<h3 id="配置项"><a href="#配置项" class="headerlink" title="配置项"></a>配置项</h3><ol>
+<li><code>refetchOnWindowFocus</code></li>
+</ol>
+<p>如果用户在短暂离开窗口后回来时，数据被标记为过时的，react-query会在后台自动请求新的数据</p>
+<p>可以使用该配置项在全局或者单个查询中禁用该功能</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全局</span></span><br><span class="line"><span class="keyword">const</span> queryClient = <span class="keyword">new</span> <span class="title class_">QueryClient</span>(&#123;</span><br><span class="line">  <span class="attr">defaultOptions</span>: &#123;</span><br><span class="line">    <span class="attr">queries</span>: &#123;</span><br><span class="line">      <span class="attr">refetchOnWindowFocus</span>: <span class="literal">false</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 单个查询</span></span><br><span class="line"><span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;useData&quot;</span>],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">  <span class="attr">refetchOnWindowFocus</span>: <span class="literal">false</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><code>enabled</code></li>
+</ol>
+<p>可以为单个查询配置<code>enabled = false</code>来禁用自动查询</p>
+<p>当<code>enabled = false</code>时：</p>
+<ul>
+<li>如果查询已经缓存了数据，将以<code>status === &#39;success&#39;</code>进行初始化</li>
+<li>如果查询没有缓存数据，将以<code>status === &#39;loading&#39;</code>进行初始化</li>
+<li>该查询不会在挂载时自动获取数据、不会在后台重新获取数据</li>
+<li>将忽略客户端的<code>invalidateQueries</code>和<code>refetchQueries</code>调用</li>
+<li>从<code>useQuery</code>返回的 <strong><code>refetch</code></strong> 可用于手动触发查询以进行数据获取</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 手动触发查询</span></span><br><span class="line"><span class="keyword">const</span> &#123; isError, data, error, refetch &#125; = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;useData&quot;</span>],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">  <span class="attr">enabled</span>: <span class="literal">false</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">&lt;button onClick=&#123;<span class="function">() =&gt;</span> <span class="title function_">refetch</span>()&#125; &gt;手动触发查询&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>永久性的禁用查询并不是你使用react-query的理由，你可能更多的需要进行<a href="#enabled">惰性查询</a></p>
+<ol start="3">
+<li><code>retry</code></li>
+</ol>
+<p>当<code>useQuery</code>查询失败时，如果该查询的请求未达到最大连续重试次数（默认 3 次），那么react-query将自动重试该查询。</p>
+<p>可以在全局或者单个查询上配置重试逻辑</p>
+<ul>
+<li><code>retry = false</code> 将禁用重试  &amp;&amp;  <code>retry = true</code> 将无限次重试</li>
+<li><code>retry = 5</code> 设置为一个数字，表示最大重试次数</li>
+<li><code>retry =（failureCount，error）=&gt; ...</code> 允许基于请求失败的原因进行自定义逻辑</li>
+</ul>
+<h3 id="QueryClient的一些api"><a href="#QueryClient的一些api" class="headerlink" title="QueryClient的一些api"></a>QueryClient的一些api</h3><ol>
+<li><code>queryClient.fetchQuery</code></li>
+</ol>
+<p>该方法是一个<strong>异步</strong>的方法，用于触发查询并将结果缓存，通常用于预加载数据。</p>
+<p><strong>参数</strong></p>
+<p><code>fetchQuery</code>接受的参数和<code>useQuery</code>相同，即 queryKey、queryFn、option（可选）</p>
+<p><strong>返回值</strong></p>
+<p>调用<code>fetchQuery</code>将返回一个promise对象，包含了请求错误的信息 或者 成功时的数据</p>
+<p>当调用<code>fetchQuery</code>时会执行如下步骤：</p>
+<ul>
+<li>检查缓存中是否已有与提供的 queryKey 对应的缓存数据</li>
+<li>如果缓存中有数据，并且数据是新鲜的，那么<code>fetchQuery</code>将返回这些数据。</li>
+<li>如果缓存中没有数据，或者数据已过时，那么将执行 queryFn，并将结果数据放入缓存中。</li>
+</ul>
+<p><strong>使用示例</strong></p>
+<p>演示用户在导航到用户详情页时，使用<code>fetchQuery</code>预加载用户数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">QueryClient</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;react-query&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个 QueryClient 实例</span></span><br><span class="line"><span class="keyword">const</span> queryClient = <span class="keyword">new</span> <span class="title class_">QueryClient</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个函数，用于获取用户数据</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fetchUserById</span> = <span class="keyword">async</span> (<span class="params">userId</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">`api/users/<span class="subst">$&#123;userId&#125;</span>`</span>);</span><br><span class="line">  <span class="keyword">if</span> (!response.<span class="property">ok</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Network response was not ok&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> response.<span class="title function_">json</span>();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设这是一个事件处理函数，当用户点击时触发</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleUserLinkClick</span> = (<span class="params">userId</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 使用 fetchQuery 预加载用户数据</span></span><br><span class="line">  queryClient.<span class="title function_">fetchQuery</span>([<span class="string">&#x27;user&#x27;</span>, userId], <span class="function">() =&gt;</span> <span class="title function_">fetchUserById</span>(userId));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在这里，我们可能会进行路由导航操作</span></span><br><span class="line">  <span class="title function_">navigate</span>(<span class="string">`/users/<span class="subst">$&#123;userId&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用户详情组件</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">UserDetails</span> = (<span class="params">&#123; userId &#125;</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 使用 useQuery 钩子查询用户数据</span></span><br><span class="line">  <span class="keyword">const</span> &#123; data, isLoading, error &#125; = <span class="title function_">useQuery</span>(</span><br><span class="line">    [<span class="string">&#x27;user&#x27;</span>, userId],</span><br><span class="line">    <span class="function">() =&gt;</span> <span class="title function_">fetchUserById</span>(userId),</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">// 如果数据已经在 fetchQuery 中预加载，这里会立刻拿到缓存数据</span></span><br><span class="line">      <span class="attr">staleTime</span>: <span class="title class_">Infinity</span>, <span class="comment">// 你可以根据需要设置合适的新鲜度</span></span><br><span class="line">    &#125;</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isLoading) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Loading...<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Error: &#123;error.message&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;data.name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;/* ... 其他用户信息 */&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><code>queryClient.prefetchQuery</code></li>
+</ol>
+<p>该方法是一个<strong>异步</strong>的方法，用于在后台提前获取数据并将其存储在缓存中，以便在未来某个时刻需要时能够立即使用</p>
+<p><code>prefetchQuery</code>的工作方式与<code>fetchQuery</code>大致相同，但<code>prefetchQuery</code>更关注于数据的预加载，它通常<strong>不返回数据</strong>，只是单纯地将数据预加载到缓存中。同时，<code>prefetchQuery</code>通常在数据需要之前调用，而不是在渲染组件时调用</p>
+<ol start="3">
+<li><code>queryClient.getQueryData</code></li>
+</ol>
+<p>该方法是一个<strong>同步</strong>方法，用于返回已存在的查询的缓存数据，如果没有缓存数据则返回<code>undefined</code></p>
+<p><strong>参数</strong></p>
+<p>只需要传入 queryKey 即可</p>
+<p><strong>返回值</strong></p>
+<p>如果缓存存在则返回数据，否则返回<code>undefined</code></p>
+<p><strong>使用示例</strong></p>
+<p><code>const data = queryClient.getQueryData(queryKey)</code></p>
+<p><strong>更多</strong></p>
+<p>其他更多的<code>queryClient</code> api 可以前往<a target="_blank" rel="noopener" href="https://tanstack.com/query/latest/docs/reference/QueryClient">官网</a>查看</p>
+<h2 id="主动查询失败-Query-Invalidation"><a href="#主动查询失败-Query-Invalidation" class="headerlink" title="主动查询失败 Query Invalidation"></a>主动查询失败 Query Invalidation</h2><p>查询会在过时之后自动重新查询，但是在很多时候，由于修改了某些数据，你能明确的知道数据已经是过时的了（即使它还没有到默认的过时时间）。</p>
+<p>这个时候可以调用<code>QueryClient</code>的<code>invalidateQueries</code>方法来明确的告诉react-query数据已经过时了，并重新查询新的数据</p>
+<p>简单的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useQuery, useQueryClient &#125; <span class="keyword">from</span> <span class="string">&quot;@tanstack/react-query&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取 queryClient</span></span><br><span class="line"><span class="keyword">const</span> queryClient = <span class="title function_">useQueryClient</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使缓存中的每个查询都无效</span></span><br><span class="line">queryClient.<span class="title function_">invalidateQueries</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 无效以 userData 开头的键值的查询</span></span><br><span class="line">queryClient.<span class="title function_">invalidateQueries</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>] &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>对于传入queryKey使查询失效的精确度，也有多种方式进行控制</p>
+<ol>
+<li>传入特定的（或者完整）的queryKey</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">queryClient.<span class="title function_">invalidateQueries</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>, &#123; <span class="attr">userName</span>: <span class="string">&quot;easy code sniper&quot;</span> &#125;],</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该查询会被无效</span></span><br><span class="line"><span class="keyword">const</span> userQuery = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>, &#123; <span class="attr">userName</span>: <span class="string">&quot;easy code sniper&quot;</span> &#125;],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该查询不会被无效</span></span><br><span class="line"><span class="keyword">const</span> userQuery = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用<code>exact</code>配置，表示只想使指定的queryKey对应的查询失效</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">queryClient.<span class="title function_">invalidateQueries</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>],</span><br><span class="line">  <span class="attr">exact</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该查询会被无效</span></span><br><span class="line"><span class="keyword">const</span> userQuery = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该查询不会被无效</span></span><br><span class="line"><span class="keyword">const</span> userQuery = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>, &#123; <span class="attr">userName</span>: <span class="string">&quot;easy code sniper&quot;</span> &#125;],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>自定义更精细化的查询失效</li>
+</ol>
+<p>可以将 <strong><code>predicate</code></strong> 函数传递给<code>invalidateQueries</code>方法。 此函数将从查询缓存中接收每个Query实例，并允许你返回 true 或 false 来确定是否使该查询无效</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">queryClient.<span class="title function_">invalidateQueries</span>(&#123;</span><br><span class="line">  <span class="attr">predicate</span>: <span class="function">(<span class="params">query</span>) =&gt;</span></span><br><span class="line">    query.<span class="property">queryKey</span>[<span class="number">0</span>] === <span class="string">&quot;userData&quot;</span> &amp;&amp; query.<span class="property">queryKey</span>[<span class="number">1</span>]?.<span class="property">age</span> &gt;= <span class="number">18</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该查询会被无效</span></span><br><span class="line"><span class="keyword">const</span> userQuery = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>, &#123; <span class="attr">age</span>: <span class="number">20</span> &#125;],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该查询会被无效</span></span><br><span class="line"><span class="keyword">const</span> userQuery = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>, &#123; <span class="attr">age</span>: <span class="number">10</span> &#125;],</span><br><span class="line">  <span class="attr">queryFn</span>: getUserData,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="修改-Mutations"><a href="#修改-Mutations" class="headerlink" title="修改 Mutations"></a>修改 Mutations</h2><blockquote>
+<p>对于mutations的定义，在官方文档中是这么说的：<br>“mutations are typically used to create&#x2F;update&#x2F;delete data or perform server side-effects.”</p>
+</blockquote>
+<p>即：<strong>用于创建、删除、更新数据或者执行服务器命令等操作</strong></p>
+<p>你可以在组件或者自定义hook中使用 <strong><code>useMutation</code></strong> 来修改数据</p>
+<p>简单示例：修改用户的信息</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> mutation = <span class="title function_">useMutation</span>(&#123;</span><br><span class="line">    <span class="attr">mutationFn</span>: <span class="function">(<span class="params">userInfo</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> axios.<span class="title function_">post</span>(<span class="string">&quot;/updateUserInfo&quot;</span>, userInfo);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;mutation.isLoading ? (</span></span><br><span class="line"><span class="language-xml">        &quot;updating ...&quot;</span></span><br><span class="line"><span class="language-xml">      ) : (</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">          &#123;mutation.isError ? (</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">div</span>&gt;</span>An error occurred: &#123;mutation.error.message&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          ) : null&#125;</span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">          &#123;mutation.isSuccess ? <span class="tag">&lt;<span class="name">div</span>&gt;</span>updated!<span class="tag">&lt;/<span class="name">div</span>&gt;</span> : null&#125;</span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">button</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">            <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-xml">              mutation.mutate(&#123; userName: &#x27;easy code sniper&#x27; &#125;);</span></span><br><span class="line"><span class="language-xml">            &#125;&#125;</span></span><br><span class="line"><span class="language-xml">          &gt;</span></span><br><span class="line"><span class="language-xml">            修改用户信息</span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">      )&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由上面的例子可以看出，你可以通过调用<code>mutation</code>方法来给mutationFn传入参数</p>
+<p><code>useMutation</code>和查询一样也会返回一些状态和信息：</p>
+<p>状态：</p>
+<ul>
+<li>布尔值<code>isLoading</code> 或者 <code>status === &#39;loading&#39;</code> 表示修改正在进行</li>
+<li>布尔值<code>isError</code> 或者 <code>status === &#39;error&#39;</code> 表示修改遇到了错误</li>
+<li>布尔值<code>isSuccess</code> 或者 <code>status === &#39;success&#39;</code> 表示修改成功，数据可用</li>
+</ul>
+<p>信息：</p>
+<ul>
+<li><code>error</code> 如果修改处于<code>isError</code>状态,可以获取到错误的具体信息</li>
+<li><code>data</code> 如果修改处于<code>isSuccess</code>状态，可以获取到数据</li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong> <code>mutate</code>函数是一个异步函数，在React16及以前版本，你不能在事件回调中直接使用它。你需要将mutate包装在另一个函数中</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在React16及之前的版本，这将无法正常工作</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">CreateTodo</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> mutation = <span class="title function_">useMutation</span>(&#123;</span><br><span class="line">    <span class="attr">mutationFn</span>: <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">      event.<span class="title function_">preventDefault</span>()</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">fetch</span>(<span class="string">&quot;/api&quot;</span>, <span class="keyword">new</span> <span class="title class_">FormData</span>(event.<span class="property">target</span>))</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">form</span> <span class="attr">onSubmit</span>=<span class="string">&#123;mutation.mutate&#125;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这将正常工作</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">CreateTodo</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> mutation = <span class="title function_">useMutation</span>(&#123;</span><br><span class="line">    <span class="attr">mutationFn</span>: <span class="function">(<span class="params">formData</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">fetch</span>(<span class="string">&quot;/api&quot;</span>, formData)</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">onSubmit</span> = (<span class="params">event</span>) =&gt; &#123;</span><br><span class="line">    event.<span class="title function_">preventDefault</span>()</span><br><span class="line">    mutation.<span class="title function_">mutate</span>(<span class="keyword">new</span> <span class="title class_">FormData</span>(event.<span class="property">target</span>))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">form</span> <span class="attr">onSubmit</span>=<span class="string">&#123;onSubmit&#125;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="副作用"><a href="#副作用" class="headerlink" title="副作用"></a>副作用</h3><p><code>useMutation</code>最便利，也是最有用的功能可能就在于它能定义一些副作用配置，这些配置允许在其生命周期的任何阶段快速而简单地产生副作用。</p>
+<p>一个最常见的例子就是，在修改数据之后能自动的重新获取最新的数据（如果你经历过一些开发，那你一定会对这个功能感到兴奋🚀～～）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useMutation</span>(&#123;</span><br><span class="line">  <span class="attr">mutationFn</span>: updateUserInfo,</span><br><span class="line">  <span class="attr">onMutate</span>: <span class="function">(<span class="params">variables</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 修改即将发生！</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">onError</span>: <span class="function">(<span class="params">error, variables, context</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 错误触发！</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">onSuccess</span>: <span class="function">(<span class="params">data, variables, context</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 成功时触发</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">onSettled</span>: <span class="function">(<span class="params">data, error, variables, context</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 错误或成功……这并不重要</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>除了在<code>useMutation</code>中可以配置这些副作用项外，还可以在调用<code>mutate</code>函数时配置组件特定的副作用，支持的配置项包括：<code>onSuccess</code>、<code>onError</code> 和  <code>onSettled</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">mutate</span>(userInfo, &#123;</span><br><span class="line">  <span class="attr">onSuccess</span>: <span class="function">(<span class="params">data, variables, context</span>) =&gt;</span> &#123;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">onError</span>: <span class="function">(<span class="params">error, variables, context</span>) =&gt;</span> &#123;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">onSettled</span>: <span class="function">(<span class="params">data, error, variables, context</span>) =&gt;</span> &#123;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong> 如果组件在修改完成之前就被卸载了，那使用mutate配置的组件特定的副作用将不被运行</p>
+<h3 id="修改导致的查询失败"><a href="#修改导致的查询失败" class="headerlink" title="修改导致的查询失败"></a>修改导致的查询失败</h3><p>在开发中非常常见的是，当应用中的一个对数据的修改成功时，很有可能在你的应用中有相关的查询需要作废，并需要重新获取数据来解释修改所产生的新变化</p>
+<p>假设我们调用<code>const mutation = useMutation(&#123; mutationFn: updateUserInfo &#125;)</code>对用户信息进行了修改，那么势必导致现在渲染的数据是过时的。我们希望所有对userInfo的查询都失效，并重新获取最新的数据</p>
+<p>我们可以使用<code>useMutation</code>的副作用<code>onSuccess</code>配置 和QueryClient的<code>invalidateQueries</code>函数来实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useMutation, useQueryClient &#125; <span class="keyword">from</span> <span class="string">&quot;@tanstack/react-query&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> queryClient = <span class="title function_">useQueryClient</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当此修改成功时，将所有带有useData查询键值的查询都无效</span></span><br><span class="line"><span class="keyword">const</span> mutation = <span class="title function_">useMutation</span>(&#123;</span><br><span class="line">  <span class="attr">mutationFn</span>: updateUserInfo,</span><br><span class="line">  <span class="attr">onSuccess</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    queryClient.<span class="title function_">invalidateQueries</span>(&#123; <span class="attr">queryKey</span>: [<span class="string">&quot;userData&quot;</span>] &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过修改的数据更新查询内容"><a href="#通过修改的数据更新查询内容" class="headerlink" title="通过修改的数据更新查询内容"></a>通过修改的数据更新查询内容</h3><p>当在处理更新某些数据时，新的数据往往会在更新的响应中自动返回，我们可以利用修改函数返回的对象，并使用 Query Client 的 <strong><code>setQueryData</code></strong> 方法立即用新数据更新现有的查询，而不是去触发新的数据获取，浪费对已有数据的网络调用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> queryClient = <span class="title function_">useQueryClient</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mutation = <span class="title function_">useMutation</span>(&#123;</span><br><span class="line">  <span class="attr">mutationFn</span>: updateUserInfo,</span><br><span class="line">  <span class="attr">onSuccess</span>: <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    queryClient.<span class="title function_">setQueryData</span>([<span class="string">&quot;userData&quot;</span>, &#123; <span class="attr">userName</span>: <span class="string">&#x27;cqy&#x27;</span> &#125;], data);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">mutation.<span class="title function_">mutate</span>(&#123;</span><br><span class="line">  <span class="attr">userName</span>: <span class="string">&#x27;cqy&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">22</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面的查询将被更新为成功的修改响应</span></span><br><span class="line"><span class="keyword">const</span> &#123; status, data, error &#125; = <span class="title function_">useQuery</span>(&#123;</span><br><span class="line">  <span class="attr">queryKey</span>: [<span class="string">&quot;useData&quot;</span>, &#123; <span class="attr">userName</span>: <span class="string">&#x27;cqy&#x27;</span> &#125;],</span><br><span class="line">  <span class="attr">queryFn</span>: fetchTodoById,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="useInfiniteQuery"><a href="#useInfiniteQuery" class="headerlink" title="useInfiniteQuery"></a>useInfiniteQuery</h2><p><code>useInfiniteQuery</code>钩子用于处理无限滚动或分页场景，它可以用来逐页加载数据，并且可以无缝地集成更多数据加载到现有数据集中。</p>
+<p><strong>参数</strong></p>
+<p><code>useInfiniteQuery</code>接受以下参数：</p>
+<ul>
+<li>queryKey</li>
+<li>queryFn</li>
+<li>options (可选): 一个配置对象，包含以下属性：<ul>
+<li><code>getNextPageParam</code>: 一个函数，用于从最后一页的数据中获取下一页的 pageParam</li>
+<li><code>getPreviousPageParam</code>: 一个函数，用于从第一页的数据中获取上一页的 pageParam</li>
+<li>其他 React Query 提供的所有配置选项，如 staleTime, cacheTime, onSuccess, onError 等</li>
+</ul>
+</li>
+</ul>
+<p><strong>getNextPageParam</strong></p>
+<p><code>getNextPageParam</code>用于定义如何从获取到的数据中提取分页参数，以便加载下一页的数据。</p>
+<p><code>getNextPageParam</code>函数接收两个参数：</p>
+<ul>
+<li><code>lastPage</code>: 当前查询返回的最后一页数据。</li>
+<li><code>allPages</code>: 当前已经加载的所有页面组成的数组。</li>
+</ul>
+<p>函数的返回值应该是一个值，这个值将作为下一个 <code>pageParam</code> 参数传递给 <code>queryFn</code> 函数以获取下一页数据。</p>
+<p>示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">getNextPageParam</span> = (<span class="params">lastPage, allPages</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 如果 API 有一个 &#x27;nextPage&#x27; 字段，就返回它来获取下一页</span></span><br><span class="line">  <span class="keyword">return</span> lastPage.<span class="property">nextPage</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getNextPageParam</span> = (<span class="params">lastPage, allPages</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 如果 API 使用游标，并且存在一个 &#x27;nextCursor&#x27; 字段，就返回它</span></span><br><span class="line">  <span class="keyword">return</span> lastPage.<span class="property">nextCursor</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>getPreviousPageParam</strong></p>
+<p><code>getPreviousPageParam</code>用于获取前一页数据，在实现双向无限滚动或分页时特别有用。</p>
+<p><code>getPreviousPageParam</code>函数接收两个参数：</p>
+<ul>
+<li><code>firstPage</code>: 当前查询返回的第一页数据。</li>
+<li><code>allPages</code>: 目前已经加载的所有页面数据的数组。<br>这个函数的返回值应该是一个标识，表示用于 <code>queryFn</code> 函数获取前一页数据时所需的 <code>pageParam</code></li>
+</ul>
+<p>示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">getPreviousPageParam</span> = (<span class="params">firstPage, allPages</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 如果 API 有一个 &#x27;prevPage&#x27; 字段，就返回它来获取前一页</span></span><br><span class="line">  <span class="keyword">return</span> firstPage.<span class="property">prevPage</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getPreviousPageParam</span> = (<span class="params">firstPage, allPages</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 如果 API 使用游标，并且存在一个 &#x27;prevCursor&#x27; 字段，就返回它</span></span><br><span class="line">  <span class="keyword">return</span> firstPage.<span class="property">prevCursor</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>返回值</strong></p>
+<p><code>useInfiniteQuery</code>返回一个对象，其中包含以下属性：</p>
+<ul>
+<li><code>status</code>: 查询的状态（’loading’, ‘error’, ‘success’, ‘idle’）。</li>
+<li><code>data</code>: 包含每一页数据的数组。</li>
+<li><code>error</code>: 查询失败时的错误对象。</li>
+<li><code>fetchNextPage</code>: 函数，用于获取下一页数据。</li>
+<li><code>fetchPreviousPage</code>: 函数，用于获取上一页数据。</li>
+<li><code>hasNextPage</code>: 布尔值，表示是否还有下一页数据。</li>
+<li><code>hasPreviousPage</code>: 布尔值，表示是否还有上一页数据。</li>
+<li><code>isFetchingNextPage</code>: 布尔值，表示是否正在获取下一页数据。</li>
+<li><code>isFetchingPreviousPage</code>: 布尔值，表示是否正在获取上一页数据。</li>
+<li><code>isFetching</code>: 布尔值，表示是否正在进行查询（包括初始查询和后续的分页查询）。</li>
+<li><code>isLoading</code>: 布尔值，表示是否正在进行初始查询。</li>
+<li><code>isRefetching</code>: 布尔值，表示是否正在重新获取数据。</li>
+<li>其他 React Query 钩子通常返回的属性，如 refetch, remove 等。</li>
+</ul>
+<p><strong>data</strong></p>
+<p><code>useInfiniteQuery</code>返回的<strong>data</strong>与常规的<code>useQuery</code>不同，因为它需要处理多个“页”的数据，而不是单个数据集。</p>
+<p><code>data</code> 是一个对象，它包含以下属性：</p>
+<ul>
+<li><code>pages</code>: 一个数组，其中的每一个元素代表了每一页加载的数据。这些数据按照加载的顺序排列。例如，<code>data.pages[0]</code> 是第一页的数据，<code>data.pages[1]</code> 是第二页的数据，依此类推。</li>
+<li><code>pageParams</code>: 这个数组与 <code>pages</code> 数组有相同的长度，包含了获取每一页数据时 queryFn 函数使用的参数。通常这些参数是由 <code>getNextPageParam</code> 或 <code>getPreviousPageParam</code> 函数提供的。</li>
+</ul>
+<p><strong>使用示例</strong></p>
+<p>下面是一个使用 <code>useInfiniteQuery</code> 来实现无限滚动加载文章列表的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useInfiniteQuery &#125; <span class="keyword">from</span> <span class="string">&#x27;react-query&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 分页获取文章的函数</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fetchArticles</span> = <span class="keyword">async</span> (<span class="params">&#123; pageParam = <span class="number">1</span> &#125;</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">`/api/articles?page=<span class="subst">$&#123;pageParam&#125;</span>`</span>);</span><br><span class="line">  <span class="keyword">return</span> res.<span class="title function_">json</span>();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组件内部</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">ArticlesList</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123;</span><br><span class="line">    data,</span><br><span class="line">    error,</span><br><span class="line">    fetchNextPage,</span><br><span class="line">    hasNextPage,</span><br><span class="line">    isFetchingNextPage,</span><br><span class="line">    status,</span><br><span class="line">  &#125; = <span class="title function_">useInfiniteQuery</span>(<span class="string">&#x27;articles&#x27;</span>, fetchArticles, &#123;</span><br><span class="line">    <span class="attr">getNextPageParam</span>: <span class="function">(<span class="params">lastPage, pages</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (lastPage.<span class="property">nextPage</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> lastPage.<span class="property">nextPage</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (status === <span class="string">&#x27;loading&#x27;</span>) <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Loading...<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span>;</span><br><span class="line">  <span class="keyword">if</span> (status === <span class="string">&#x27;error&#x27;</span>) <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Error: &#123;error.message&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;data.pages.map((page, i) =&gt; (</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">React.Fragment</span> <span class="attr">key</span>=<span class="string">&#123;i&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          &#123;page.articles.map(article =&gt; (</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span> <span class="attr">key</span>=<span class="string">&#123;article.id&#125;</span>&gt;</span>&#123;article.title&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          ))&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">React.Fragment</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      ))&#125;</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">button</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> fetchNextPage()&#125;</span></span><br><span class="line"><span class="language-xml">          disabled=&#123;!hasNextPage || isFetchingNextPage&#125;</span></span><br><span class="line"><span class="language-xml">        &gt;</span></span><br><span class="line"><span class="language-xml">          &#123;isFetchingNextPage</span></span><br><span class="line"><span class="language-xml">            ? &#x27;Loading more...&#x27;</span></span><br><span class="line"><span class="language-xml">            : hasNextPage</span></span><br><span class="line"><span class="language-xml">            ? &#x27;Load More&#x27;</span></span><br><span class="line"><span class="language-xml">            : &#x27;Nothing more to load&#x27;&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="useMutation"><a href="#useMutation" class="headerlink" title="useMutation"></a>useMutation</h2><p><code>useMutation</code> 钩子是用来处理异步逻辑（如创建、更新或删除数据）的，这些逻辑会引起数据的变化。与<code>useQuery</code>和<code>useInfiniteQuery</code>不同的是，<code>useMutation</code>不是用来获取数据的，而是用来修改数据</p>
+<p><strong>参数</strong></p>
+<p><code>useMutation</code> 接受以下参数：</p>
+<ul>
+<li><code>mutationFn</code> (必须): 一个函数，它执行异步逻辑（比如API调用）。这个函数接受你传递给mutate函数的变量。</li>
+<li><code>options</code> (可选): 一个配置对象，可以包含如下属性：<ul>
+<li><code>onMutate</code>: 在 mutationFn 执行之前调用的函数，用于执行乐观更新或返回回滚函数的数据。</li>
+<li><code>onSuccess</code>: 当 mutationFn 成功完成时调用的函数。</li>
+<li><code>onError</code>: 当 mutationFn 执行失败时调用的函数。</li>
+<li><code>onSettled</code>: 无论 mutationFn 成功还是失败都会调用的函数。</li>
+<li>以及其他选项</li>
+</ul>
+</li>
+</ul>
+<p><strong>返回值</strong></p>
+<p><code>useMutation</code> 返回一个对象，其中包含以下属性和方法:</p>
+<ul>
+<li><code>mutate</code>: 一个函数，你可以用它来触发异步逻辑（mutationFn）的执行。</li>
+<li><code>mutateAsync</code>: 类似于mutate，但是返回一个Promise，可以用于async&#x2F;await。</li>
+<li><code>data</code>: mutationFn成功解析的数据。</li>
+<li><code>error</code>: 如果mutationFn抛出错误，这里会包含错误对象。</li>
+<li><code>isLoading</code>: 如果mutationFn正在执行，这里会是true。</li>
+<li><code>isSuccess</code>: 如果mutationFn成功完成，这里会是true。</li>
+<li><code>isError</code>: 如果mutationFn执行失败，这里会是true。</li>
+<li><code>status</code>: mutation的状态（idle、loading、success、error）。</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/React/">React</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2024 chen qiyi
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
