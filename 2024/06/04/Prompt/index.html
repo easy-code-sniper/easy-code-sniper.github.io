@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Prompt | easycodesniper | blog by chen qiyi</title>
+
+  
+  <meta name="author" content="chen qiyi">
+  
+
+  
+  <meta name="description" content="前言有效地与大型语言模型交流已成为一种关键技能。在openAI 的官方文档中已经给出了最佳实践——如何精心构建问题（prompt engineering），以便从这些大模型中获得最准确、最相关的答案。正确认识并运用这些技巧。
+在我的这篇文章中，将总结概括如何编写优秀的 prompt
+编写详细的指示 ">
+  
+
+  
+  
+  <meta name="keywords" content="prompt 大模型">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Prompt"/>
+
+  <meta property="og:site_name" content="easycodesniper"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="easycodesniper" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">easycodesniper</a>
+    </h1>
+    <p class="site-description">blog by chen qiyi</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Prompt</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2024/06/04/Prompt/" rel="bookmark">
+        <time class="entry-date published" datetime="2024-06-04T14:05:55.000Z">
+          2024-06-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有效地与大型语言模型交流已成为一种关键技能。在<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/prompt-engineering">openAI 的官方文档</a>中已经给出了最佳实践——如何精心构建问题（prompt engineering），以便从这些大模型中获得最准确、最相关的答案。正确认识并运用这些技巧。</p>
+<p>在我的这篇文章中，将总结概括如何编写优秀的 prompt</p>
+<h2 id="编写详细的指示-大模型不是你肚子里的蛔虫"><a href="#编写详细的指示-大模型不是你肚子里的蛔虫" class="headerlink" title="编写详细的指示 - 大模型不是你肚子里的蛔虫"></a>编写详细的指示 - 大模型不是你肚子里的蛔虫</h2><p>大模型无法读懂你的想法，它只能根据你给他的信息来返回结果。因此，你需要确保你的 prompt 包含足够的信息，以便大模型理解你的意图。</p>
+<p>大模型不会嫌弃你啰嗦，你对问题描述的越详细，你越有可能得到想要的结果。</p>
+<p>以下是一些编写 prompt 的策略：</p>
+<h4 id="1-详细描述你的问题，才能得到更相关的回答"><a href="#1-详细描述你的问题，才能得到更相关的回答" class="headerlink" title="1. 详细描述你的问题，才能得到更相关的回答"></a>1. 详细描述你的问题，才能得到更相关的回答</h4><p>为了获得高度相关的回复，请确保请求提供了任何重要的细节或上下文。否则你就把它留给模型去猜你的意思了。</p>
+<p><strong>Worse Prompt</strong>: 帮我编写一段代码来计算斐波那契数列</p>
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image.png" class title="This is an image">
+
+<p><strong>Better Prompt</strong>: 写一个 JavaScript 函数来正确高效地计算斐波那契数列，并在关键步骤处给出注释，以解释每个部分的作用以及为什么要这么写</p>
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image-1.png" class title="This is an image">
+<img src="/2024/06/04/Prompt/image-2.png" class title="This is an image">
+
+<h4 id="2-给大模型一个人设，也给用户一个人设"><a href="#2-给大模型一个人设，也给用户一个人设" class="headerlink" title="2. 给大模型一个人设，也给用户一个人设"></a>2. 给大模型一个人设，也给用户一个人设</h4><p>可以指定大模型在回复时的人设，一个合适且恰当的人设能让大模型更好地响应你的问题。</p>
+<p><strong>Worse Prompt</strong>: 向我解释一下计算机网络的 OSI 模型</p>
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image-3.png" class title="This is an image">
+
+<p><strong>Better Prompt（给大模型一个人设）</strong>: 你是一个网络工程师，向我解释一下计算机网络的 OSI 模型</p>
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image-4.png" class title="This is an image">
+
+<p><strong>Better Prompt（给用户一个人设）</strong>: 我是一个 10 岁的孩子，向我解释一下计算机网络的 OSI 模型</p>
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image-5.png" class title="This is an image">
+
+<h4 id="3-使用分隔符清楚的指示提问的不同部分"><a href="#3-使用分隔符清楚的指示提问的不同部分" class="headerlink" title="3. 使用分隔符清楚的指示提问的不同部分"></a>3. 使用分隔符清楚的指示提问的不同部分</h4><p>分隔符例如三引号、XML 标记、章节标题等，可以帮助区分文本的不同部分。</p>
+<p><strong>Better Prompt</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">示例 1: 使用XML标记作为分隔符</span><br><span class="line"></span><br><span class="line">你将获得关于同一主题的两篇文章(用XML标记分隔)。首先总结每篇文章的论点。然后指出哪一个论点更站得住脚并解释原因。</span><br><span class="line"></span><br><span class="line">&lt;article&gt; insert first article here &lt;/article&gt;</span><br><span class="line">&lt;article&gt; insert second article here &lt;/article&gt;</span><br><span class="line"></span><br><span class="line">示例 2: 使用三引号作为分隔符</span><br><span class="line"></span><br><span class="line">总结用三引号分隔的文本</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;insert text here&quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-指定完成任务所需的步骤"><a href="#4-指定完成任务所需的步骤" class="headerlink" title="4. 指定完成任务所需的步骤"></a>4. 指定完成任务所需的步骤</h4><p>指定完成任务所需的步骤，大模型会按照步骤执行，而不是直接给出最终答案。这可以确保大模型理解你的意图，并正确地执行任务。</p>
+<p><strong>Worse Prompt</strong>: 请帮我写一篇关于 xxx 的热点新闻的解读</p>
+<p><strong>Better Prompt</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">请你按照下列步骤来给我撰写一篇关于xxx的热点新闻的解读</span><br><span class="line">Step 1: 检索关于xxx的新闻，选取热度较高的3篇新闻</span><br><span class="line">Step 2: 对3篇新闻进行摘要，并分析其核心观点和原因，先形成解读的目录框架</span><br><span class="line">Step 3: 根据目录框架，对3篇新闻进行详细解读，并解释其观点和原因</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-向大模型提供例子"><a href="#5-向大模型提供例子" class="headerlink" title="5. 向大模型提供例子"></a>5. 向大模型提供例子</h4><p><strong>Worse Prompt</strong>: 我是一个前端初学者，请给我推荐一篇关于 css 的文章</p>
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image-6.png" class title="This is an image">
+
+<p><strong>Better Prompt</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">我是一个前端初学者，请给我推荐一篇关于css的文章，按照 四等号 中的示例回复我：</span><br><span class="line"></span><br><span class="line">====</span><br><span class="line">文章名称：xxx</span><br><span class="line">文章链接：xxx</span><br><span class="line">推荐理由：xxx</span><br><span class="line">====</span><br></pre></td></tr></table></figure>
+
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image-7.png" class title="This is an image">
+
+<h4 id="6-指定大模型返回的长度"><a href="#6-指定大模型返回的长度" class="headerlink" title="6. 指定大模型返回的长度"></a>6. 指定大模型返回的长度</h4><p>你可以要求模型生成具有给定目标长度的输出，目标输出长度可以根据单词、句子、段落、项目符号等的数量来指定。</p>
+<p>但是请注意，指示模型生成特定数量的单词并不能达到高精度。模型可以更可靠地生成具有特定数量的段落或要点的输出。</p>
+<p><strong>Better Prompt</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">示例 1: 用三引号分隔的文本在50个单词内进行总结。</span><br><span class="line">示例 2: 用两段话总结用三引号分隔的文本。</span><br><span class="line">示例 3: 用3个要点总结三引号分隔的文本。</span><br></pre></td></tr></table></figure>
+
+<h2 id="向大模型提供参考文本"><a href="#向大模型提供参考文本" class="headerlink" title="向大模型提供参考文本"></a>向大模型提供参考文本</h2><p>大模型可以通过自由地发挥来回答你的提问，特别是当被问及深奥的话题或引用和 url 时，这就会导致大模型回复给用户了一个假答案</p>
+<p>为大模型提供参考文本可以限制它的过度自由发挥，同时也减少得到假答案的可能性</p>
+<p>如果我们可以为模型提供与当前查询相关的可信信息，那么我们可以指示模型使用提供的信息来组成它的答案。</p>
+<p><strong>Better Prompt</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">使用三引号分隔的文章回答问题。如果在文章中找不到答案，就写“我找不到答案”。</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;insert article here&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">问题：xxx</span><br></pre></td></tr></table></figure>
+
+<p>考虑到所有模型都有有限的上下文窗口，我们需要一些方法来动态查找与所问问题相关的信息 — 这就是需要用到 <strong>知识库</strong> 了</p>
+<h2 id="将复杂的任务拆分为更简单的子任务"><a href="#将复杂的任务拆分为更简单的子任务" class="headerlink" title="将复杂的任务拆分为更简单的子任务"></a>将复杂的任务拆分为更简单的子任务</h2><p>正如将复杂系统分解为一组模块化组件是软件工程中的良好实践一样，提交给语言模型的任务也是如此。复杂任务往往比简单任务的错误率更高。</p>
+<p>此外，复杂的任务通常可以重新定义为简单任务的工作流，其中早期任务的输出用于构造后续任务的输入。</p>
+<p>对于需要大量独立指令来处理不同情况的任务，首先对查询类型进行分类，并使用该分类来确定需要执行哪些指令。还可以递归地应用此过程，将任务分解为一系列阶段。这可以通过定义固定类别和硬编码与处理给定类别中的任务相关的指令来实现。</p>
+<p><strong>Better Prompt</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//  先对用户查询进行分类，类似于定义不同的功能分支</span><br><span class="line"></span><br><span class="line">您将获得客户服务查询。将每个查询划分为主要类别和次要类别。根据主要类别和次要类别给出你的回复。</span><br><span class="line">主要类别：前端 和 后端</span><br><span class="line">次要类别：</span><br><span class="line">  前端次要类别：ui设计 和 接口调用</span><br><span class="line">  后端次要类别：bug修复 和 接口开发</span><br><span class="line"></span><br><span class="line">//  根据分类，给出对应的回复</span><br><span class="line"></span><br><span class="line">当用户询问你的上下文涉及「ui设计」时，请按照以下步骤为用户提供帮助：</span><br><span class="line">- Step 1：询问用户 ui 的类型，例如：按钮、输入框、弹窗等</span><br><span class="line">- Step 2: 询问用户要设计的 ui 的大致样式，例如尺寸、颜色、字体等</span><br><span class="line">- Step 3: 根据用户要求给出ui设计的html 和 css代码，并询问用户是否对此满意</span><br><span class="line">- Step 4: 如果用户满意，则 接着询问用户该ui是否需要设计JS逻辑；否则，重复步骤 1 和 2</span><br><span class="line">- Step 5: 如果用户需要设计JS逻辑，则根据用户需求给出JS代码；如果用户不需要设计JS逻辑，则结束</span><br><span class="line"></span><br><span class="line">当用户询问你的上下文涉及「接口调用」时，请按照以下步骤为用户提供帮助：</span><br><span class="line">- Step 1: 询问用户接口类型、接口url 和 接口参数</span><br><span class="line">- Step 2: 询问用户是否指定某个工具库进行网络请求，如果用户未指定，则默认使用axios来编写请求</span><br><span class="line">- Step 3: 根据用户需求给出请求代码，并询问用户是否对此满意</span><br><span class="line">- Step 4: 如果用户满意，则 结束；否则，重复步骤 1 和 2</span><br><span class="line"></span><br><span class="line">当用户询问你的上下文涉及「bug修复」时，请按照以下步骤为用户提供帮助：</span><br><span class="line">- Step 1: 询问用户bug的位置、bug描述和bug截图</span><br><span class="line">- Step 2: 根据用户需求给出修复代码，并询问用户是否对此满意</span><br><span class="line">- Step 3: 如果用户满意，则 结束；否则，重复步骤 1 和 2</span><br><span class="line"></span><br><span class="line">当用户询问你的上下文涉及「接口开发」时，请按照以下步骤为用户提供帮助：</span><br><span class="line">- Step 1: 询问用户接口类型、接口url 和 接口参数</span><br><span class="line">- Step 2: 询问用户使用什么编程语言或者框架来编写接口代码，如果用户未指定，则默认使用Java</span><br><span class="line">- Step 3: 根据用户需求给出接口代码，并询问用户是否对此满意</span><br><span class="line">- Step 4: 如果用户满意，则 结束；否则，重复步骤 1 和 2</span><br><span class="line"></span><br><span class="line">如果你已经理解上述内容，请回复我「已理解」，我会在下一条问题中咨询你问题，请根据上述内容进行匹配和回答。</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用这种方法的好处就在于：</strong></p>
+<p>通过发出特殊字符串来指示模型，以指示对话状态何时发生变化。这使我们能够将系统转换为状态机，其中状态决定注入哪些指令。通过跟踪状态，与该状态相关的指令，以及可选的允许从该状态转换的状态。</p>
+<p>得到的回复：</p>
+<img src="/2024/06/04/Prompt/image-8.png" class title="This is an image">
+<img src="/2024/06/04/Prompt/image-9.png" class title="This is an image">
+<img src="/2024/06/04/Prompt/image-10.png" class title="This is an image">
+<img src="/2024/06/04/Prompt/image-11.png" class title="This is an image">
+
+<h2 id="给模型时间去「思考」"><a href="#给模型时间去「思考」" class="headerlink" title="给模型时间去「思考」"></a>给模型时间去「思考」</h2><p>当试图立即回答问题时，模型会犯更多的推理错误，而不是花时间找出答案。在回答问题之前询问“思维链”可以帮助模型更可靠地推理出正确的答案。</p>
+<h4 id="1-在匆忙得出结论之前，指示模型自己找出解决方案"><a href="#1-在匆忙得出结论之前，指示模型自己找出解决方案" class="headerlink" title="1. 在匆忙得出结论之前，指示模型自己找出解决方案"></a>1. 在匆忙得出结论之前，指示模型自己找出解决方案</h4><p>当我们明确地指示模型在得出结论之前从第一原则进行推理时，我们会得到更好的结果。例如，假设我们需要一个模型来评估学生对数学问题的解决方案。最明显的解决方法就是简单地询问模型学生的解决方案是否正确。</p>
+<p>来看下面的例子：</p>
+<p><strong>Worse Prompt</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">用户：</span><br><span class="line"></span><br><span class="line">判断学生的答案是否正确。</span><br><span class="line"></span><br><span class="line">问题陈述:我正在建造一个太阳能装置，我需要帮助来解决财务问题。</span><br><span class="line">-土地成本为每平方英尺100美元</span><br><span class="line">-我能以每平方英尺250美元的价格买到太阳能电池板</span><br><span class="line">-我谈了一份维护合同，每年要花我10万美元，每平方英尺还要额外花10美元</span><br><span class="line">第一年运营的总成本是多少作为平方英尺数的函数?</span><br><span class="line"></span><br><span class="line">学生解答:设x为装置面积，单位为平方英尺。</span><br><span class="line">1. 土地成本:100倍</span><br><span class="line">2. 太阳能电池板成本:250倍</span><br><span class="line">3. 维护费用:10万+ 100倍</span><br><span class="line">总成本:100x + 250x + 100000 + 100x = 450x + 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">大模型回复： 解决方案正确！</span><br></pre></td></tr></table></figure>
+
+<p>但是这个学生的答案其实是<strong>不正确</strong>的!</p>
+<p>在我们可以通过提示<strong>模型首先生成自己的解决方案</strong>来让模型成功地注意到这一点，即让模型先自己进行思考。</p>
+<p><strong>Better Prompt</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">用户：</span><br><span class="line"></span><br><span class="line">首先想出你自己解决这个问题的办法。然后将你的解决方案与学生的解决方案进行比较，并评估学生的解决方案是否正确。在你自己做了这道题之前，不要判断这个学生的答案是否正确。</span><br><span class="line"></span><br><span class="line">问题陈述:我正在建造一个太阳能装置，我需要帮助来解决财务问题。</span><br><span class="line">-土地成本为每平方英尺100美元</span><br><span class="line">-我能以每平方英尺250美元的价格买到太阳能电池板</span><br><span class="line">-我谈了一份维护合同，每年要花我10万美元，每平方英尺还要额外花10美元</span><br><span class="line">第一年运营的总成本是多少作为平方英尺数的函数?</span><br><span class="line"></span><br><span class="line">学生解答:设x为装置面积，单位为平方英尺。</span><br><span class="line">1. 土地成本:100倍</span><br><span class="line">2. 太阳能电池板成本:250倍</span><br><span class="line">3. 维护费用:10万+ 100倍</span><br><span class="line">总成本:100x + 250x + 100000 + 100x = 450x + 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">大模型回复：</span><br><span class="line"></span><br><span class="line">设x为装置面积，单位为平方英尺。</span><br><span class="line">1. 土地成本:100倍</span><br><span class="line">2. 太阳能电池板成本:250倍</span><br><span class="line">3. 维护费用:10万+ 10倍</span><br><span class="line">总成本:100x + 250x + 100000 + 10x = 360x + 100000</span><br><span class="line"></span><br><span class="line">这个学生的答案不正确。他们在维修成本计算中犯了一个错误，用100倍代替10倍。第一年运营的正确总成本是360x + 100,000。</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-使用内心独白或查询序列来隐藏模型的推理过程"><a href="#2-使用内心独白或查询序列来隐藏模型的推理过程" class="headerlink" title="2. 使用内心独白或查询序列来隐藏模型的推理过程"></a>2. 使用内心独白或查询序列来隐藏模型的推理过程</h4><p>前面的策略表明，在回答特定问题之前，模型有时对问题进行详细的推理是很重要的。</p>
+<p>对于某些应用程序，模型用于得出最终答案的推理过程可能不适合与用户共享。例如，在辅导应用程序中，我们可能希望鼓励学生自己找出答案，但模型对学生解决方案的推理过程可能会向学生揭示答案。</p>
+<p>内心独白是一种可以用来缓解这种情况的策略。内心独白的思想是指示模型将对用户隐藏的部分输出放入结构化格式中，以便于解析它们。然后，在将输出呈现给用户之前，对输出进行解析，只显示想要给用户看到的部分。</p>
+<p><strong>Better Prompt</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">你作为一个专业和资深数学老师，判断学生的答案是否正确。</span><br><span class="line"></span><br><span class="line">按照以下步骤回答用户查询，先不要输出任何三引号(&quot;&quot;&quot;)中的内容，等执行完所有步骤时再根据步骤的要求输出应该输出的内容。</span><br><span class="line"></span><br><span class="line">Step 1: 首先找出你自己解决问题的方法。不要依赖学生的答案，因为它可能是错误的。将此步骤的所有工作用三引号(&quot;&quot;&quot;)括起来。</span><br><span class="line"></span><br><span class="line">Step 2: 将你的解决方案与学生的解决方案进行比较，并评估学生的解决方案是否正确。将此步骤的所有工作用三引号(&quot;&quot;&quot;)括起来。</span><br><span class="line"></span><br><span class="line">Step 3: 如果学生犯了一个错误，确定你可以给学生什么提示而不泄露答案。将此步骤的所有工作用三引号(&quot;&quot;&quot;)括起来。</span><br><span class="line"></span><br><span class="line">Step 4: 如果学生犯了错误，只给学生提供上一步的提示，不要输出三引号中的内容。不要写“Step 4: .....”，而要写“提示: ...”。</span><br><span class="line"></span><br><span class="line">如果你已经理解上述内容，请回复我「已理解」，我会在下一条问题中给出数学问题 和 学生的解决方案，请根据上述内容进行匹配和回答。</span><br></pre></td></tr></table></figure>
+
+<p>测试 Prompt：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">用户：</span><br><span class="line"></span><br><span class="line">问题陈述:我正在建造一个太阳能装置，我需要帮助来解决财务问题。</span><br><span class="line">-土地成本为每平方英尺100美元</span><br><span class="line">-我能以每平方英尺250美元的价格买到太阳能电池板</span><br><span class="line">-我谈了一份维护合同，每年要花我10万美元，每平方英尺还要额外花10美元</span><br><span class="line">第一年运营的总成本是多少作为平方英尺数的函数?</span><br><span class="line"></span><br><span class="line">学生解答:设x为装置面积，单位为平方英尺。</span><br><span class="line">1. 土地成本:100倍</span><br><span class="line">2. 太阳能电池板成本:250倍</span><br><span class="line">3. 维护费用:10万+ 100倍</span><br><span class="line">总成本:100x + 250x + 100000 + 100x = 450x + 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">大模型：</span><br><span class="line"></span><br><span class="line">提示: 请检查维护合同中变量成本的计算，确保每平方英尺的额外费用被正确计算。</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/prompt-大模型/">prompt 大模型</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2024 chen qiyi
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
